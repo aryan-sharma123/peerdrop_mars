@@ -11,16 +11,28 @@ const MAX_BUFFER = 256 * 1024       // pause sending if outgoing buffer exceeds 
 // Open Relay Project gives us free TURN (20GB/month, no billing setup)
 const ICE_CONFIG = {
   iceServers: [
-    { urls: 'stun:stun.l.google.com:19302' },
     {
-      urls: 'turn:openrelay.metered.ca:80',
-      username: 'openrelayproject',
-      credential: 'openrelayproject',
+      urls: 'stun:stun.relay.metered.ca:80',
     },
     {
-      urls: 'turn:openrelay.metered.ca:443',
-      username: 'openrelayproject',
-      credential: 'openrelayproject',
+      urls: 'turn:global.relay.metered.ca:80',
+      username: '42552c796c92f02cee48a5cf',
+      credential: 'MtqmTWvXFpEeevF4',
+    },
+    {
+      urls: 'turn:global.relay.metered.ca:80?transport=tcp',
+      username: '42552c796c92f02cee48a5cf',
+      credential: 'MtqmTWvXFpEeevF4',
+    },
+    {
+      urls: 'turn:global.relay.metered.ca:443',
+      username: '42552c796c92f02cee48a5cf',
+      credential: 'MtqmTWvXFpEeevF4',
+    },
+    {
+      urls: 'turns:global.relay.metered.ca:443?transport=tcp',
+      username: '42552c796c92f02cee48a5cf',
+      credential: 'MtqmTWvXFpEeevF4',
     },
   ],
 }
