@@ -1,4 +1,14 @@
-# 📡 PeerDrop
+
+## NAME  - ARYAN
+## EN NO - 23112022
+## E-MAIL - aryan@ch.iitr.ac.in
+
+
+# The backend is on Render's free tier so the first connection might take ~30 seconds if the server went to sleep. Just wait a moment — it'll come up.
+
+
+
+#  PeerDrop
 
 P2P file transfer, straight from browser to browser. No servers storing your files, no accounts, no size limits from some company's storage bill. Drop a file, share a link, other person gets it. That's it.
 
@@ -10,9 +20,8 @@ Built this for MARS Open Projects 2026.
 
 - **App** → https://peerdrop-mars.vercel.app/
 - **Server** → https://peerdrop-mars.onrender.com/
-- **Demo** → _add after recording_
 
-The backend is on Render's free tier so the first connection might take ~30 seconds if the server went to sleep. Just wait a moment — it'll come up.
+
 
 ---
 
