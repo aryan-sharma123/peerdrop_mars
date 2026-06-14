@@ -5,7 +5,7 @@
 
 #  PeerDrop
 
-## **Heads up:** the backend is on Render's free tier so the first connection might take around 30 seconds if the server went to sleep. Just wait a moment and it'll come up fine.
+##  the backend is on Render's free tier so the first connection might take around 30 seconds if the server went to sleep. Just wait a moment and it'll come up fine.
 
 ---
 
