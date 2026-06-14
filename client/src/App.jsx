@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useWebRTC } from './useWebRTC'
 import { formatBytes } from './utils'
 
-// ─── Connection Status Badge ──────────────────────────────────────────────────
+//       Connection Status Badge
 
 function StatusBadge({ status, connectionType }) {
   const configs = {
@@ -23,7 +23,10 @@ function StatusBadge({ status, connectionType }) {
   )
 }
 
-// ─── Progress Bar ─────────────────────────────────────────────────────────────
+//      Progress
+
+
+
 
 function ProgressBar({ progress }) {
   if (!progress) return null
@@ -45,7 +48,7 @@ function ProgressBar({ progress }) {
   )
 }
 
-// ─── Transfer Summary Card ────────────────────────────────────────────────────
+// ─── Transfer Summary
 
 function SummaryCard({ summary, isReceiver }) {
   return (
@@ -86,16 +89,22 @@ function SummaryCard({ summary, isReceiver }) {
   )
 }
 
-// ─── Drop Zone ────────────────────────────────────────────────────────────────
+// ─── Drop
 
 function DropZone({ onFile, disabled }) {
   const [dragging, setDragging] = useState(false)
+
+
   const inputRef = useRef(null)
+
+
 
   const handleDrop = (e) => {
     e.preventDefault()
     setDragging(false)
+
     if (disabled) return
+
     const file = e.dataTransfer.files[0]
     if (file) onFile(file)
   }
@@ -109,8 +118,12 @@ function DropZone({ onFile, disabled }) {
     <div
       onDragOver={(e) => { e.preventDefault(); if (!disabled) setDragging(true) }}
       onDragLeave={() => setDragging(false)}
+
+
       onDrop={handleDrop}
       onClick={() => !disabled && inputRef.current?.click()}
+
+
       className={`
         w-full border-2 border-dashed rounded-xl p-10 text-center cursor-pointer
         transition-all duration-200 select-none
@@ -133,12 +146,14 @@ function DropZone({ onFile, disabled }) {
   )
 }
 
-// ─── Main App ─────────────────────────────────────────────────────────────────
+// ─── Main App
 
 export default function App() {
   const [selectedFile, setSelectedFile] = useState(null)
   const [fileError, setFileError] = useState(null)
   const [copied, setCopied] = useState(false)
+
+
 
   const {
     initSender,
@@ -153,11 +168,13 @@ export default function App() {
   } = useWebRTC()
 
   // figure out if we're the receiver by checking the URL
+
+
+
   const params = new URLSearchParams(window.location.search)
   const roomId = params.get('room')
   const isReceiver = !!roomId
 
-  // receiver: auto-connect on mount
   useEffect(() => {
     if (!isReceiver) return
     const base64Key = window.location.hash.startsWith('#key=')
@@ -172,7 +189,6 @@ export default function App() {
     initReceiver(roomId, base64Key)
   }, [])
 
-  // sender: handle file drop
   const handleFile = (file) => {
     setFileError(null)
 
@@ -185,7 +201,6 @@ export default function App() {
     initSender(file)
   }
 
-  // copy share link to clipboard
   const copyLink = () => {
     navigator.clipboard.writeText(shareUrl)
     setCopied(true)

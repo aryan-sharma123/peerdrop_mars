@@ -2,14 +2,29 @@ import { useState, useRef } from 'react'
 import { io } from 'socket.io-client'
 import { hashFile, encryptFile, decryptFile, generateKey, exportKey, importKey } from './utils'
 
+
+
+
+
+
+
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001'
 
 const CHUNK_SIZE = 16 * 1024        // 16KB per chunk — safe across all browsers
 const MAX_BUFFER = 256 * 1024       // pause sending if outgoing buffer exceeds 256KB
 
-// ICE servers — STUN for direct P2P, TURN as relay fallback
-// Open Relay Project gives us free TURN (20GB/month, no billing setup)
+
+
+
+
+
+
+
 const ICE_CONFIG = {
+
+
+
+
   iceServers: [
     {
       urls: 'stun:stun.relay.metered.ca:80',
@@ -37,17 +52,28 @@ const ICE_CONFIG = {
   ],
 }
 
+
 export function useWebRTC() {
   // ─── State ──────────────────────────────────────────────────────────────────
   const [connectionStatus, setConnectionStatus] = useState('idle')
   // idle | waiting | connecting | connected | disconnected
+
+
+
+
   const [connectionType, setConnectionType] = useState(null)
   // 'Direct P2P' | 'Relay' — detected from ICE candidate type after connect
   const [progress, setProgress] = useState(null)
+
+
+
   // { pct, speed } updated during transfer
   const [shareUrl, setShareUrl] = useState(null)
   const [transferSummary, setTransferSummary] = useState(null)
   const [error, setError] = useState(null)
+
+
+
   const [peerJoined, setPeerJoined] = useState(false)
 
   // ─── Refs (mutable, don't trigger re-renders) ────────────────────────────────
@@ -73,12 +99,20 @@ export function useWebRTC() {
       }
     }
 
+
+
+
     // watch connection state — this catches network drops, not just tab closes
     pc.oniceconnectionstatechange = () => {
       const state = pc.iceConnectionState
 
+
+
       if (state === 'connected' || state === 'completed') {
         setConnectionStatus('connected')
+
+
+
 
         // figure out if we're going direct or through the TURN relay
         pc.getStats().then((stats) => {
@@ -86,6 +120,7 @@ export function useWebRTC() {
             if (report.type === 'candidate-pair' && report.state === 'succeeded') {
               const remote = [...stats.values()].find((r) => r.id === report.remoteCandidateId)
               if (remote) {
+
                 setConnectionType(remote.candidateType === 'relay' ? 'Relay' : 'Direct P2P')
               }
             }
@@ -109,11 +144,15 @@ export function useWebRTC() {
 
     // generate encryption key for this session
     const key = await generateKey()
+
+
     cryptoKeyRef.current = key
     const base64Key = await exportKey(key)
 
     const socket = io(SERVER_URL)
     socketRef.current = socket
+
+
 
     socket.once('connect', () => {
       socket.emit('create-room')
@@ -125,6 +164,7 @@ export function useWebRTC() {
       const url = `${window.location.origin}/?room=${roomId}#key=${base64Key}`
       setShareUrl(url)
       setConnectionStatus('waiting')
+
     })
 
     // receiver joined — now we kick off the WebRTC handshake
@@ -203,7 +243,6 @@ export function useWebRTC() {
     // encrypt the whole file in one shot
     const { encrypted, iv } = await encryptFile(originalBuffer, key)
 
-    // send metadata first so receiver knows what's coming
     dc.send(
       JSON.stringify({
         type: 'meta',
@@ -211,7 +250,7 @@ export function useWebRTC() {
         size: file.size,
         mimeType: file.type,
         hash,
-        iv: Array.from(iv),   // IV is not secret — receiver needs it to decrypt
+        iv: Array.from(iv),
       })
     )
 
@@ -242,7 +281,6 @@ export function useWebRTC() {
       }
     }
 
-    // signal that all chunks have been sent
     dc.send(JSON.stringify({ type: 'done' }))
 
     const duration = Math.max(0.1, (Date.now() - startTime) / 1000).toFixed(1)
@@ -330,7 +368,6 @@ export function useWebRTC() {
         const msg = JSON.parse(event.data)
 
         if (msg.type === 'meta') {
-          // reset state for this transfer
           metadata = msg
           chunks.length = 0
           receivedBytes = 0
@@ -338,7 +375,6 @@ export function useWebRTC() {
         }
 
         if (msg.type === 'done' && metadata) {
-          // reassemble all chunks into one ArrayBuffer
           const totalBytes = chunks.reduce((acc, c) => acc + c.byteLength, 0)
           const combined = new Uint8Array(totalBytes)
           let pos = 0
@@ -363,7 +399,6 @@ export function useWebRTC() {
             return
           }
 
-          // everything looks good — trigger the download
           const blob = new Blob([decrypted], { type: metadata.mimeType })
           const url = URL.createObjectURL(blob)
           const a = document.createElement('a')
@@ -383,12 +418,10 @@ export function useWebRTC() {
           setProgress({ pct: 100, speed: avgSpeed })
         }
       } else {
-        // binary chunk — just collect it
         chunks.push(event.data)
         receivedBytes += event.data.byteLength
 
         if (metadata && startTime) {
-          // progress based on original file size (encrypted is slightly larger, close enough)
           const pct = Math.min(99, Math.round((receivedBytes / metadata.size) * 100))
           const elapsed = (Date.now() - startTime) / 1000 || 0.01
           const speed = (receivedBytes / elapsed / 1024 / 1024).toFixed(1)
