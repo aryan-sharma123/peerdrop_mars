@@ -103,7 +103,7 @@ export function useWebRTC() {
     const socket = io(SERVER_URL)
     socketRef.current = socket
 
-    socket.on('connect', () => {
+    socket.once('connect', () => {
       socket.emit('create-room')
     })
 
@@ -256,7 +256,7 @@ export function useWebRTC() {
     socketRef.current = socket
     setConnectionStatus('connecting')
 
-    socket.on('connect', () => {
+    socket.once('connect', () => {
       socket.emit('join-room', { roomId })
     })
 
