@@ -6,7 +6,7 @@
 #  PeerDrop
 
 ##  the backend is on Render's free tier so the first connection might take around 30 seconds if the server went to sleep. Just wait a moment and it'll come up fine.
-![][ui/]
+<img src="results screenshots/Screenshot 2026-06-14 at 3.53.13 PM.png" alt="App Dashboard" width="500">
 ---
 
 ### To enable share on different networks ( sender and receiver are on different wifi connections )  METERED credentials are used.
