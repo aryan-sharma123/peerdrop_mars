@@ -5,7 +5,7 @@
 
 #  PeerDrop
 
-#  the backend is on Render's free tier so the first connection might take around 2-3 minutes , may be 5 minutes if the server went to sleep. Just wait a moment and it'll come up fine. The screenshots is showing what can happen after uploading a file, it will wake up slowly in the first run then everything will be fine.
+#  the backend is on Render's free tier so the first connection might take around 2-3 minutes , may be 5 minutes if the server went to sleep. Just wait a moment and it'll come up fine. The screenshot is showing what can happen after uploading a file, it will wake up slowly in the first run then everything will be fine.
 <img src="Screenshot 2026-06-15 at 7.15.26 PM.png" alt="App Dashboard" width="500">
 ---
 
